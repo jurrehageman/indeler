@@ -4,8 +4,9 @@
 Generate dummy data for munkres indeler
 by Jurre Hageman
 2018
-Licence: GNU General Public License (GPL)
+License: GNU General Public License (GPL)
 """
+#Imports
 import random
 import sys
 import argparse
@@ -13,10 +14,6 @@ import datetime
 import time
 import csv
 
-
-#variables
-exp_data_file = "experiment"
-num_exp = 8
 
 def get_comm_args():
     """

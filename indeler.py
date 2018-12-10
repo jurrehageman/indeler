@@ -3,7 +3,7 @@
 Practicum Assigner
 by Jurre Hageman (with a little help from David Langers on the algorithm)
 2018
-Licence: GNU General Public License (GPL)
+License: GNU General Public License (GPL)
 """
 #Imports
 import sys
