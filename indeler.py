@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 Practicum Assigner
-by Jurre Hageman (with help from David Langens)
+by Jurre Hageman (with a little help from David Langers on the algorithm)
 2018
+Licence: GNU General Public License (GPL)
 """
 #Imports
 import sys

@@ -2,6 +2,9 @@
 
 """
 Generate dummy data for munkres indeler
+by Jurre Hageman
+2018
+Licence: GNU General Public License (GPL)
 """
 import random
 import sys
