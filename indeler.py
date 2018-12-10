@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Practicum Assigner
 by Jurre Hageman (with a little help from Dave Langers on the algorithm)
-2018
+Year: 2018
 License: GNU General Public License (GPL)
 """
 #Imports
@@ -22,8 +23,8 @@ np.set_printoptions(threshold=np.inf)
 
 def get_comm_args():
     """
-    reads command line arguments
-    :return: args
+    Reads command line arguments
+    :return: object with command line arguments (obj)
     """
     parser = argparse.ArgumentParser(description="Select students in groups based on preferences")
     parser.add_argument("infile", help="the path to the File with preferences")
@@ -35,9 +36,9 @@ def get_comm_args():
 
 def read_file(file_name):
     """
-    reads student preferences csv file
-    :param file_name:
-    :return: students
+    Reads student preferences csv file
+    :param file_name: The name of the input file (str)
+    :return: a list of dictionaries with student data. Each student is a dictionary (list)
     """
     done = []
     students = []
@@ -68,8 +69,8 @@ def read_file(file_name):
 def read_experiment_data(file_name):
     """
     reads the experiment data file and number of positions available
-    :param file_name:
-    :return:
+    :param file_name: The name of the experiment data file (str)
+    :return: a list of dictionaries with experiment data. Each experiment is a dictionary. (list)
     """
     with open(file_name) as f:
         experiments = []
@@ -83,8 +84,8 @@ def read_experiment_data(file_name):
 def generate_pref_matrix(students):
     """
     generates preference matrix
-    :param students:
-    :return: matrix
+    :param students: a list of dictionaries. Each student is a dictionary. (list)
+    :return: matrix: a list of lists (preferences). Preferences are stored in a list. (list)
     """
     matrix = []
     for student in students:
@@ -94,9 +95,10 @@ def generate_pref_matrix(students):
 
 def generate_experiment_matrix(matrix, experiment_data):
     """
-    extents an experiment matrix with preferences according to number of positions
-    :param matrix:
-    :return: numpy array of the matrix
+    Extents an experiment matrix with preferences according to number of positions
+    :param matrix: a list of lists with preferences (list)
+    :param experiment_data: a list of dictionaries with experiment data. Each experiment is a dictionary (list)
+    :return: numpy array of the matrix. The matrix is expanded with "random preferences" (np_array)
     """
     experiment_matrix = []
     num_of_students = len(matrix)
@@ -117,7 +119,6 @@ def generate_experiment_matrix(matrix, experiment_data):
                 random_experiment = random.choice(position_list)
                 student_matrix[index] = random_experiment
                 position_list.remove(random_experiment)
-
         #now expand this list
         expanded_list = []
         for index, item in enumerate(student_matrix):
@@ -130,9 +131,9 @@ def generate_experiment_matrix(matrix, experiment_data):
 
 def generate_assignment(expanded_matrix, experiment_data):
     """
-    generates an assignment using the Scipy linear sum assignment module
-    :param expanded_matrix:
-    :return:
+    Generates an assignment using the Scipy linear sum assignment module
+    :param expanded_matrix: numpy array of the matrix (np.array)
+    :return: a list of selected_experiments (list)
     """
     experiment_capacity = [i['capacity'] for i in experiment_data]
     experiment_row = [str((i + 1)) * experiment_capacity[i] for i in range(len(experiment_capacity))]
@@ -144,10 +145,10 @@ def generate_assignment(expanded_matrix, experiment_data):
 
 def add_assignment_data(student_data, assignment, experiment_data):
     """
-    adds the assignment data to the student dictionary
-    :param student_data:
-    :param assignment:
-    :return: list of student data dictionaries
+    Adds the assignment data to the student dictionary
+    :param student_data: a list of dictionaries. Each student is a dictionary. (list)
+    :param assignment: a list of selected_experiments (list)
+    :return: list of students. each student is a dictionary (list)
     """
     for num, student in enumerate(student_data):
         student['assigned'] = assignment[num]
@@ -162,10 +163,12 @@ def add_assignment_data(student_data, assignment, experiment_data):
 
 def calc_assignment_statistics(student_data, experiment_data):
     """
-    calcs number of first choice, second choice etc.
-    calcs an assignment score: first choice: points = num of experiments, second choice: points = num of experiments -1 etc.
-    :param student_data:
-    :return:
+    Calcs number of first choice, second choice etc.
+    Calcs an assignment score: first choice: points = num of experiments, second choice: points = num of experiments -1 etc.
+    Prints results to screen
+    :param student_data: list of students. each student is a dictionary (list)
+    :param experiment_data: a list of dictionaries with experiment data. Each experiment is a dictionary (list)
+    :return: None
     """
     score = 0
     assigned = []
@@ -191,10 +194,10 @@ def calc_assignment_statistics(student_data, experiment_data):
 
 def write_results(student_data, outfile):
     """
-    write results to outfile using csv module
-    :param student_data:
-    :param outfile:
-    :return:
+    Write results to outfile using csv module
+    :param student_data: list of students. each student is a dictionary (list)
+    :param outfile: The name of the outfile (str)
+    :return: None
     """
     with open(outfile, 'w') as f:
         writer = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
@@ -217,7 +220,7 @@ def write_results(student_data, outfile):
 
 def main():
     """
-    main module
+    Main module
     :return: 0 if OK
     """
     t0 = time.time()
