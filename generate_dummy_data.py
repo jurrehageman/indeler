@@ -31,7 +31,14 @@ def get_comm_args():
 
 
 def generate_dummy_data_file(file_name, num_of_students, experiments, preferences):
-    """saves the data to csv file"""
+    """
+    generates csv file to be used in indeler.py
+    :param file_name:
+    :param num_of_students:
+    :param experiments:
+    :param preferences:
+    :return: None
+    """
     with open(file_name, "w") as f:
         writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_NONE)
         student_num = 300001
