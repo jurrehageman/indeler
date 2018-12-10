@@ -6,7 +6,7 @@ by Jurre Hageman (with a little help from Dave Langers on the algorithm)
 Year: 2018
 License: GNU General Public License (GPL)
 """
-#Imports
+# Imports
 import sys
 import numpy as np
 import random
@@ -17,7 +17,7 @@ import operator
 from scipy.optimize import linear_sum_assignment
 import collections
 
-#Set numpy to print entire arrays
+# Set numpy to print entire arrays
 np.set_printoptions(threshold=np.inf)
 
 
@@ -52,13 +52,13 @@ def read_file(file_name):
                     done.pop(0)
                 student_data = {
                     'student_num': int(line[1]),
-                    'achternaam' : line[2],
-                    'voornaam' : line[3],
-                    'klas' : line[4],
-                    'thema' : line[5],
-                    'datum' : line[6],
-                    'tijd' : line[7],
-                    'voorkeuren' : []
+                    'achternaam': line[2],
+                    'voornaam': line[3],
+                    'klas': line[4],
+                    'thema': line[5],
+                    'datum': line[6],
+                    'tijd': line[7],
+                    'voorkeuren': []
                 }
                 done.append(line[1])
             student_data['voorkeuren'].append(int(line[-1]))
@@ -76,8 +76,8 @@ def read_experiment_data(file_name):
         experiments = []
         for line in f:
             line = line.strip().split(';')
-            experiments.append({'name' : str(line[-1]),
-                                'capacity' : int(line[0])})
+            experiments.append({'name': str(line[-1]),
+                                'capacity': int(line[0])})
     return experiments
 
 
@@ -111,15 +111,15 @@ def generate_experiment_matrix(matrix, experiment_data):
         possible_experiments = list(range(1, len(experiment_data) + 1))
         student_matrix = [None for i in range(len(experiment_data))]
         for index, i in enumerate(item):
-            student_matrix[i-1]= (index + 1)
-        #now share remainder of preferences
+            student_matrix[i - 1] = (index + 1)
+        # now share remainder of preferences
         position_list = [i for i in range(len(item) + 1, len(experiment_data) + 1)]
         for index, item in enumerate(student_matrix):
-            if item == None:
+            if item is None:
                 random_experiment = random.choice(position_list)
                 student_matrix[index] = random_experiment
                 position_list.remove(random_experiment)
-        #now expand this list
+        # now expand this list
         expanded_list = []
         for index, item in enumerate(student_matrix):
             capacity = experiment_data[index]['capacity']
@@ -177,7 +177,7 @@ def calc_assignment_statistics(student_data, experiment_data):
     for student in student_data:
         assigned.append(student['assigned'])
         if student['pref_position'] != 'random':
-            score += len(experiment_data) - (student['pref_position'] -1)
+            score += len(experiment_data) - (student['pref_position'] - 1)
     assigned_frequencies = collections.Counter(assigned)
     for i in sorted(assigned_frequencies):
         capacity = experiment_data[i-1]['capacity']

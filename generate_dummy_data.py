@@ -6,7 +6,7 @@ by Jurre Hageman
 Year: 2018
 License: GNU General Public License (GPL)
 """
-#Imports
+# Imports
 import random
 import sys
 import argparse
@@ -22,9 +22,12 @@ def get_comm_args():
     """
     parser = argparse.ArgumentParser(description="Generate dummy data")
     parser.add_argument("outfile", help="the path to the File with the output")
-    parser.add_argument("-s", "--students", type=int, help="change number of students, defaults 100")
-    parser.add_argument("-p", "--preferences", type=int, help="change number of preferences, defaults 3")
-    parser.add_argument("-e", "--experiments", type=int, help="change number of experiments, defaults 8")
+    parser.add_argument("-s", "--students", type=int,
+                        help="change number of students, defaults 100")
+    parser.add_argument("-p", "--preferences", type=int,
+                        help="change number of preferences, defaults 3")
+    parser.add_argument("-e", "--experiments", type=int,
+                        help="change number of experiments, defaults 8")
     args = parser.parse_args()
     return args
 
@@ -68,7 +71,6 @@ def generate_dummy_data_file(file_name, num_of_students, experiments, preference
             student_num += 1
 
 
-
 def main():
     """
     The main module
@@ -78,11 +80,11 @@ def main():
     preferences = 3
     experiments = 8
     arguments = get_comm_args()
-    if arguments.students != None:
+    if arguments.students not None:
         students = arguments.students
-    if arguments.preferences != None:
+    if arguments.preferences not None:
         preferences = arguments.preferences
-    if arguments.experiments != None:
+    if arguments.experiments not None:
         experiments = arguments.experiments
     generate_dummy_data_file(arguments.outfile, students, experiments, preferences)
     print("Students:", students)
