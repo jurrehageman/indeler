@@ -6,7 +6,7 @@ https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.optimize.linea
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will show some examples to run the scripts
 
 ### Prerequisites
 
@@ -19,13 +19,13 @@ Use pip to install scipy and numpy:
 Numpy:
 
 ```
-sudo pip install numpy
+pip install numpy
 ```
 
 Scipy
 
 ```
-sudo pip install scipy
+pip install scipy
 ```
 
 
@@ -38,7 +38,7 @@ Example:
 python3 generate_dummy_data.py my_file.csv
 ```
 
-### It has some optional arguments:
+### [Optional]Arguments:
 
 usage: generate_dummy_data.py [-h] [-s STUDENTS] [-p PREFERENCES]
                               [-e EXPERIMENTS]
@@ -62,6 +62,8 @@ Example:
 python3 assigner.py test_prefs.csv test_assignment.csv experiment_data.txt
 ```
 
+
+### Arguments
 usage: assigner.py [-h] infile outfile experiment_names
 
 Required argument:
