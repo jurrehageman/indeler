@@ -80,11 +80,11 @@ def main():
     preferences = 3
     experiments = 8
     arguments = get_comm_args()
-    if not arguments.students is None:
+    if arguments.students is not None:
         students = arguments.students
-    if not arguments.preferences is None:
+    if arguments.preferences is not None:
         preferences = arguments.preferences
-    if not arguments.experiments is None:
+    if arguments.experiments is not None:
         experiments = arguments.experiments
     generate_dummy_data_file(arguments.outfile, students, experiments, preferences)
     print("Students:", students)
