@@ -104,7 +104,8 @@ def generate_experiment_matrix(matrix, experiment_data):
     num_of_students = len(matrix)
     total_experiment_places = sum([i['capacity'] for i in experiment_data])
     if total_experiment_places < num_of_students:
-        print("Warning! only {} experiment places is less then number of students ({})".format(total_experiment_places, num_of_students))
+        print("Warning! only {} experiment places is less then number of students ({})".format(total_experiment_places,
+                                                                                               num_of_students))
         print("Exit...")
         sys.exit(1)
     for item in matrix:
@@ -152,10 +153,10 @@ def add_assignment_data(student_data, assignment, experiment_data):
     """
     for num, student in enumerate(student_data):
         student['assigned'] = assignment[num]
-        name = experiment_data[assignment[num]-1]['name']
+        name = experiment_data[assignment[num] - 1]['name']
         student['assigned_exp_name'] = name
         if assignment[num] in student['voorkeuren']:
-            student['pref_position'] = student['voorkeuren'].index(assignment[num])+1
+            student['pref_position'] = student['voorkeuren'].index(assignment[num]) + 1
         else:
             student['pref_position'] = 'random'
     return student_data
@@ -164,7 +165,7 @@ def add_assignment_data(student_data, assignment, experiment_data):
 def calc_assignment_statistics(student_data, experiment_data):
     """
     Calcs number of first choice, second choice etc.
-    Calcs an assignment score: first choice: points = num of experiments, second choice: points = num of experiments -1 etc.
+    Calcs an assignment score: first choice: points = num of experiments, second choice: points = num of experiments -1.
     Prints results to screen
     :param student_data: list of students. each student is a dictionary (list)
     :param experiment_data: a list of dictionaries with experiment data. Each experiment is a dictionary (list)
@@ -180,14 +181,19 @@ def calc_assignment_statistics(student_data, experiment_data):
             score += len(experiment_data) - (student['pref_position'] - 1)
     assigned_frequencies = collections.Counter(assigned)
     for i in sorted(assigned_frequencies):
-        capacity = experiment_data[i-1]['capacity']
-        print("experiment: {}, capacity: {}, assigned: {}, places left over: {}".format(i, capacity, assigned_frequencies[i], capacity - assigned_frequencies[i]))
+        capacity = experiment_data[i - 1]['capacity']
+        print("experiment: {}, capacity: {}, assigned: {}, places left over: {}".format(i, capacity,
+                                                                                        assigned_frequencies[i],
+                                                                                        capacity - assigned_frequencies[
+                                                                                            i]))
     print()
     for i in range(len(student_data[0]['voorkeuren'])):
-        num_at_position = [student['pref_position'] for student in student_data if student['pref_position'] == i+1].count(i+1)
-        print('Preference {}: {}'.format(i+1, num_at_position))
+        num_at_position = [student['pref_position'] for student in student_data if
+                           student['pref_position'] == i + 1].count(i + 1)
+        print('Preference {}: {}'.format(i + 1, num_at_position))
 
-    print('Random: {}'.format([student['pref_position'] for student in student_data if student['pref_position'] == 'random'].count('random')))
+    print('Random: {}'.format(
+        [student['pref_position'] for student in student_data if student['pref_position'] == 'random'].count('random')))
     print()
     print('Total Score: {}'.format(score))
 
@@ -234,7 +240,7 @@ def main():
     calc_assignment_statistics(student_data, experiment_data)
     write_results(student_data, args.outfile)
     print("Result written to {}".format(args.outfile))
-    print("Approximate runtime:", round(time.time()-t0, 2), "sec")
+    print("Approximate runtime:", round(time.time() - t0, 2), "sec")
     print("Done...")
     return 0
 

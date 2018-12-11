@@ -46,13 +46,13 @@ def generate_dummy_data_file(file_name, num_of_students, experiments, preference
         student_num = 300001
         for student in range(num_of_students):
             entry = student + 1
-            first_name = "voornaam {}".format(str(entry).zfill(len(str(num_of_students-1))))
-            last_name = "achternaam {}".format(str(entry).zfill(len(str(num_of_students-1))))
+            first_name = "voornaam {}".format(str(entry).zfill(len(str(num_of_students - 1))))
+            last_name = "achternaam {}".format(str(entry).zfill(len(str(num_of_students - 1))))
             group = "BOVR2B"
             theme = 5
             date_now = datetime.datetime.today().strftime('%Y-%m-%d')
             time_now = time.strftime("%H:%M:%S")
-            choices = random.sample(range(1, experiments+1), preferences)
+            choices = random.sample(range(1, experiments + 1), preferences)
             for line in range(preferences):
                 row = [entry,
                        student_num,
@@ -62,9 +62,9 @@ def generate_dummy_data_file(file_name, num_of_students, experiments, preference
                        theme,
                        date_now,
                        time_now,
-                       line+1,
+                       line + 1,
                        entry,
-                       line+1,
+                       line + 1,
                        choices[line]
                        ]
                 writer.writerow(row)
@@ -80,11 +80,11 @@ def main():
     preferences = 3
     experiments = 8
     arguments = get_comm_args()
-    if arguments.students not None:
+    if not arguments.students is None:
         students = arguments.students
-    if arguments.preferences not None:
+    if not arguments.preferences is None:
         preferences = arguments.preferences
-    if arguments.experiments not None:
+    if not arguments.experiments is None:
         experiments = arguments.experiments
     generate_dummy_data_file(arguments.outfile, students, experiments, preferences)
     print("Students:", students)
