@@ -69,7 +69,7 @@ usage: assigner.py [-h] infile outfile experiment_names
 Required argument:
 infile: path to the csv file containing the preferences
 outfile: path to the csv file with the assignment
-experiment_names: a txt file with number of positions and the name of the experiments
+experiment_names: a txt file with number of positions and the name of the experiments  
 
 ## Built With
 
