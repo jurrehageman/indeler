@@ -73,12 +73,12 @@ def read_experiment_data(file_name):
     :return: a list of dictionaries with experiment data. Each experiment is a dictionary. (list)
     """
     with open(file_name) as f:
-        experiments = []
+        exp = []
         for line in f:
             line = line.strip().split(';')
-            experiments.append({'name': str(line[-1]),
-                                'capacity': int(line[0])})
-    return experiments
+            exp.append({'name': str(line[-1]),
+                        'capacity': int(line[0])})
+    return exp
 
 
 def generate_pref_matrix(students):
@@ -93,40 +93,40 @@ def generate_pref_matrix(students):
     return matrix
 
 
-def generate_experiment_matrix(matrix, experiment_data):
+def generate_experiment_matrix(matrix, exp_data):
     """
     Extents an experiment matrix with preferences according to number of positions
     :param matrix: a list of lists with preferences (list)
-    :param experiment_data: a list of dictionaries with experiment data. Each experiment is a dictionary (list)
+    :param exp_data: a list of dictionaries with experiment data.
+    Each experiment is a dictionary (list)
     :return: numpy array of the matrix. The matrix is expanded with "random preferences" (np_array)
     """
     experiment_matrix = []
     num_of_students = len(matrix)
-    total_experiment_places = sum([i['capacity'] for i in experiment_data])
-    if total_experiment_places < num_of_students:
-        print("Warning! only {} experiment places is less then number of students ({})".format(total_experiment_places,
-                                                                                               num_of_students))
+    total_exp_places = sum([i['capacity'] for i in exp_data])
+    if total_exp_places < num_of_students:
+        mssg = "Warning! only {} experiment places is less then number of students ({})"
+        print(mssg.format(total_exp_places, num_of_students))
         print("Exit...")
         sys.exit(1)
     for item in matrix:
-        possible_experiments = list(range(1, len(experiment_data) + 1))
-        student_matrix = [None for i in range(len(experiment_data))]
+        student_matrix = [None for i in range(len(exp_data))]
         for index, i in enumerate(item):
             student_matrix[i - 1] = (index + 1)
         # now share remainder of preferences
-        position_list = [i for i in range(len(item) + 1, len(experiment_data) + 1)]
+        position_list = [i for i in range(len(item) + 1, len(exp_data) + 1)]
         for index, item in enumerate(student_matrix):
             if item is None:
                 random_experiment = random.choice(position_list)
                 student_matrix[index] = random_experiment
                 position_list.remove(random_experiment)
         # now expand this list
-        expanded_list = []
+        exp_list = []
         for index, item in enumerate(student_matrix):
-            capacity = experiment_data[index]['capacity']
-            expanded_list.append(capacity * str(item))
-        expanded_list = [int(i) for j in expanded_list for i in j]
-        experiment_matrix.append(expanded_list)
+            capacity = exp_data[index]['capacity']
+            exp_list.append(capacity * str(item))
+        exp_list = [int(i) for j in exp_list for i in j]
+        experiment_matrix.append(exp_list)
     return np.array(experiment_matrix)
 
 
@@ -136,15 +136,15 @@ def generate_assignment(expanded_matrix, experiment_data):
     :param expanded_matrix: numpy array of the matrix (np.array)
     :return: a list of selected_experiments (list)
     """
-    experiment_capacity = [i['capacity'] for i in experiment_data]
-    experiment_row = [str((i + 1)) * experiment_capacity[i] for i in range(len(experiment_capacity))]
+    exp_cap = [i['capacity'] for i in experiment_data]
+    experiment_row = [str((i + 1)) * exp_cap[i] for i in range(len(exp_cap))]
     experiment_row_separated = [int(i) for j in experiment_row for i in j]
     row_ind, col_ind = linear_sum_assignment(expanded_matrix)
     selected_experiments = [experiment_row_separated[i] for i in col_ind]
     return selected_experiments
 
 
-def add_assignment_data(student_data, assignment, experiment_data):
+def add_assignment_data(student_data, assignment, exp_data):
     """
     Adds the assignment data to the student dictionary
     :param student_data: a list of dictionaries. Each student is a dictionary. (list)
@@ -153,7 +153,7 @@ def add_assignment_data(student_data, assignment, experiment_data):
     """
     for num, student in enumerate(student_data):
         student['assigned'] = assignment[num]
-        name = experiment_data[assignment[num] - 1]['name']
+        name = exp_data[assignment[num] - 1]['name']
         student['assigned_exp_name'] = name
         if assignment[num] in student['voorkeuren']:
             student['pref_position'] = student['voorkeuren'].index(assignment[num]) + 1
@@ -162,13 +162,15 @@ def add_assignment_data(student_data, assignment, experiment_data):
     return student_data
 
 
-def calc_assignment_statistics(student_data, experiment_data):
+def calc_assignment_statistics(student_data, exp_data):
     """
     Calcs number of first choice, second choice etc.
-    Calcs an assignment score: first choice: points = num of experiments, second choice: points = num of experiments -1.
+    Calcs an assignment score: first choice: points = num of experiments,
+    second choice: points = num of experiments -1.
     Prints results to screen
     :param student_data: list of students. each student is a dictionary (list)
-    :param experiment_data: a list of dictionaries with experiment data. Each experiment is a dictionary (list)
+    :param exp_data: a list of dictionaries with experiment data.
+    Each experiment is a dictionary (list)
     :return: None
     """
     score = 0
@@ -178,22 +180,22 @@ def calc_assignment_statistics(student_data, experiment_data):
     for student in student_data:
         assigned.append(student['assigned'])
         if student['pref_position'] != 'random':
-            score += len(experiment_data) - (student['pref_position'] - 1)
-    assigned_frequencies = collections.Counter(assigned)
-    for i in sorted(assigned_frequencies):
-        capacity = experiment_data[i - 1]['capacity']
-        print("experiment: {}, capacity: {}, assigned: {}, places left over: {}".format(i, capacity,
-                                                                                        assigned_frequencies[i],
-                                                                                        capacity - assigned_frequencies[
-                                                                                            i]))
+            score += len(exp_data) - (student['pref_position'] - 1)
+    ass_freq = collections.Counter(assigned)
+    for i in sorted(ass_freq):
+        capacity = exp_data[i - 1]['capacity']
+        mssg = "experiment: {}, capacity: {}, assigned: {}, places left over: {}"
+        print(mssg.format(i, capacity, ass_freq[i], capacity - ass_freq[i]))
     print()
     for i in range(len(student_data[0]['voorkeuren'])):
-        num_at_position = [student['pref_position'] for student in student_data if
-                           student['pref_position'] == i + 1].count(i + 1)
-        print('Preference {}: {}'.format(i + 1, num_at_position))
+        num_at_pos = [student['pref_position'] for student in student_data
+                      if student['pref_position'] == i + 1].count(i + 1)
+        print('Preference {}: {}'.format(i + 1, num_at_pos))
 
     print('Random: {}'.format(
-        [student['pref_position'] for student in student_data if student['pref_position'] == 'random'].count('random')))
+        [student['pref_position']
+         for student in student_data
+         if student['pref_position'] == 'random'].count('random')))
     print()
     print('Total Score: {}'.format(score))
 
