@@ -45,12 +45,12 @@ usage: generate_dummy_data.py [-h] [-s STUDENTS] [-p PREFERENCES]
                               outfile
 
 Required argument:
-outfile: the name of the outfile
+- outfile: the name of the outfile
 
 Optional arguments:
-STUDENTS: number of students (defaults 100)
-PREFERENCES: number of preferences (defaults 3)
-EXPERIMENTS: number of experiments (defaults 8)
+- STUDENTS: number of students (defaults 100)
+- PREFERENCES: number of preferences (defaults 3)
+- EXPERIMENTS: number of experiments (defaults 8)
 
 
 ## Running the assignment.py module
@@ -66,10 +66,10 @@ python3 assigner.py test_prefs.csv test_assignment.csv experiment_data.txt
 ### Arguments
 usage: assigner.py [-h] infile outfile experiment_names
 
-Required argument:
-infile: path to the csv file containing the preferences
-outfile: path to the csv file with the assignment
-experiment_names: a txt file with number of positions and the name of the experiments  
+Required arguments:
+- infile: path to the csv file containing the preferences
+- outfile: path to the csv file with the assignment
+- experiment_names: a txt file with number of positions and the name of the experiments
 
 ## Built With
 
