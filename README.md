@@ -63,7 +63,7 @@ python3 assigner.py test_prefs.csv test_assignment.csv experiment_data.txt
 ```
 
 
-### Arguments
+### Arguments:
 usage: assigner.py [-h] infile outfile experiment_names
 
 Required arguments:
@@ -74,14 +74,6 @@ Required arguments:
 ## Built With
 
 * [Scipy linear sum assignment module](https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.optimize.linear_sum_assignment.html)
-
-
-## Contributing
-
-
-
-## Versioning
-
 
 
 ## Authors
