@@ -15,14 +15,14 @@ Scipy and numpy need to be installed on your system
 
 ### Installing
 
-Use pip to install scipy and numpy:
-Numpy:
+Use pip to install scipy and numpy.
+- Numpy:
 
 ```
 pip install numpy
 ```
 
-Scipy
+- Scipy
 
 ```
 pip install scipy
