@@ -32,22 +32,25 @@ def get_comm_args():
     return args
 
 
-def generate_dummy_data_file(file_name, num_of_students, experiments, preferences):
+def gen_dummy_data(file_name, num_students, experiments, preferences):
     """
     Generates csv file which can be used in indeler.py
     :param file_name: The name of the file (str)
-    :param num_of_students: The number of students (int)
+    :param num_students: The number of students (int)
     :param experiments: The number of experiments (int)
     :param preferences: The number of preferences (int)
     :return: None
     """
     with open(file_name, "w") as f:
-        writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_NONE)
+        writer = csv.writer(f, delimiter='\t',
+                            quotechar='"',
+                            quoting=csv.QUOTE_NONE)
         student_num = 300001
-        for student in range(num_of_students):
+        for student in range(num_students):
             entry = student + 1
-            first_name = "voornaam {}".format(str(entry).zfill(len(str(num_of_students - 1))))
-            last_name = "achternaam {}".format(str(entry).zfill(len(str(num_of_students - 1))))
+            fiddle = str(entry).zfill(len(str(num_students - 1)))
+            first_name = "voornaam {}".format(fiddle)
+            last_name = "achternaam {}".format(fiddle)
             group = "BOVR2B"
             theme = 5
             date_now = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -86,7 +89,7 @@ def main():
         preferences = arguments.preferences
     if arguments.experiments is not None:
         experiments = arguments.experiments
-    generate_dummy_data_file(arguments.outfile, students, experiments, preferences)
+    gen_dummy_data(arguments.outfile, students, experiments, preferences)
     print("Students:", students)
     print("Preferences:", preferences)
     print("Experiments:", experiments)
