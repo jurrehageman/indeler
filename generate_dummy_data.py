@@ -34,7 +34,7 @@ def get_comm_args():
 
 def gen_dummy_data(file_name, num_students, experiments, preferences):
     """
-    Generates csv file which can be used in indeler.py
+    Generates csv file which can be used in assigner.py
     :param file_name: The name of the file (str)
     :param num_students: The number of students (int)
     :param experiments: The number of experiments (int)
