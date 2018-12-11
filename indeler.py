@@ -26,10 +26,14 @@ def get_comm_args():
     Reads command line arguments
     :return: object with command line arguments (obj)
     """
-    parser = argparse.ArgumentParser(description="Select students in groups based on preferences")
-    parser.add_argument("infile", help="the path to the File with preferences")
-    parser.add_argument("outfile", help="the path to the File with the output")
-    parser.add_argument("experiment_names", help="the path to the File with the names of experiments")
+    parser = argparse.ArgumentParser(
+        description="Select students in groups based on preferences")
+    parser.add_argument("infile",
+                        help="the path to the File with preferences")
+    parser.add_argument("outfile",
+                        help="the path to the File with the output")
+    parser.add_argument("experiment_names",
+                        help="path to the File with experiment info")
     args = parser.parse_args()
     return args
 
@@ -38,7 +42,8 @@ def read_file(file_name):
     """
     Reads student preferences csv file
     :param file_name: The name of the input file (str)
-    :return: a list of dictionaries with student data. Each student is a dictionary (list)
+    :return: a list of dictionaries with student data.
+    Each student is a dictionary (list)
     """
     done = []
     students = []
@@ -70,7 +75,8 @@ def read_experiment_data(file_name):
     """
     reads the experiment data file and number of positions available
     :param file_name: The name of the experiment data file (str)
-    :return: a list of dictionaries with experiment data. Each experiment is a dictionary. (list)
+    :return: a list of dictionaries with experiment data.
+    Each experiment is a dictionary. (list)
     """
     with open(file_name) as f:
         exp = []
@@ -84,8 +90,10 @@ def read_experiment_data(file_name):
 def generate_pref_matrix(students):
     """
     generates preference matrix
-    :param students: a list of dictionaries. Each student is a dictionary. (list)
-    :return: matrix: a list of lists (preferences). Preferences are stored in a list. (list)
+    :param students: a list of dictionaries.
+    Each student is a dictionary. (list)
+    :return: matrix: a list of lists (preferences).
+    Preferences are stored in a list. (list)
     """
     matrix = []
     for student in students:
@@ -93,19 +101,21 @@ def generate_pref_matrix(students):
     return matrix
 
 
-def generate_experiment_matrix(matrix, exp_data):
+def gen_exp_matrix(matrix, exp_data):
     """
-    Extents an experiment matrix with preferences according to number of positions
+    Extents an experiment matrix with preferences
+    according to number of positions
     :param matrix: a list of lists with preferences (list)
     :param exp_data: a list of dictionaries with experiment data.
     Each experiment is a dictionary (list)
-    :return: numpy array of the matrix. The matrix is expanded with "random preferences" (np_array)
+    :return: numpy array of the matrix.
+    The matrix is expanded with "random preferences" (np_array)
     """
-    experiment_matrix = []
+    exp_matrix = []
     num_of_students = len(matrix)
     total_exp_places = sum([i['capacity'] for i in exp_data])
     if total_exp_places < num_of_students:
-        mssg = "Warning! only {} experiment places is less then number of students ({})"
+        mssg = "Warning! {} experiment places < {} student places"
         print(mssg.format(total_exp_places, num_of_students))
         print("Exit...")
         sys.exit(1)
@@ -117,20 +127,20 @@ def generate_experiment_matrix(matrix, exp_data):
         position_list = [i for i in range(len(item) + 1, len(exp_data) + 1)]
         for index, item in enumerate(student_matrix):
             if item is None:
-                random_experiment = random.choice(position_list)
-                student_matrix[index] = random_experiment
-                position_list.remove(random_experiment)
+                random_exp = random.choice(position_list)
+                student_matrix[index] = random_exp
+                position_list.remove(random_exp)
         # now expand this list
         exp_list = []
         for index, item in enumerate(student_matrix):
             capacity = exp_data[index]['capacity']
             exp_list.append(capacity * str(item))
         exp_list = [int(i) for j in exp_list for i in j]
-        experiment_matrix.append(exp_list)
-    return np.array(experiment_matrix)
+        exp_matrix.append(exp_list)
+    return np.array(exp_matrix)
 
 
-def generate_assignment(expanded_matrix, experiment_data):
+def gen_assignment(expanded_matrix, experiment_data):
     """
     Generates an assignment using the Scipy linear sum assignment module
     :param expanded_matrix: numpy array of the matrix (np.array)
@@ -144,10 +154,11 @@ def generate_assignment(expanded_matrix, experiment_data):
     return selected_experiments
 
 
-def add_assignment_data(student_data, assignment, exp_data):
+def add_assign_data(student_data, assignment, exp_data):
     """
     Adds the assignment data to the student dictionary
-    :param student_data: a list of dictionaries. Each student is a dictionary. (list)
+    :param student_data: a list of dictionaries.
+    Each student is a dictionary. (list)
     :param assignment: a list of selected_experiments (list)
     :return: list of students. each student is a dictionary (list)
     """
@@ -156,13 +167,14 @@ def add_assignment_data(student_data, assignment, exp_data):
         name = exp_data[assignment[num] - 1]['name']
         student['assigned_exp_name'] = name
         if assignment[num] in student['voorkeuren']:
-            student['pref_position'] = student['voorkeuren'].index(assignment[num]) + 1
+            selector = student['voorkeuren'].index(assignment[num]) + 1
+            student['pref_position'] = selector
         else:
             student['pref_position'] = 'random'
     return student_data
 
 
-def calc_assignment_statistics(student_data, exp_data):
+def calc_assign_statistics(student_data, exp_data):
     """
     Calcs number of first choice, second choice etc.
     Calcs an assignment score: first choice: points = num of experiments,
@@ -184,7 +196,7 @@ def calc_assignment_statistics(student_data, exp_data):
     ass_freq = collections.Counter(assigned)
     for i in sorted(ass_freq):
         capacity = exp_data[i - 1]['capacity']
-        mssg = "experiment: {}, capacity: {}, assigned: {}, places left over: {}"
+        mssg = "experiment: {}, capacity: {}, assigned: {}, left over: {}"
         print(mssg.format(i, capacity, ass_freq[i], capacity - ass_freq[i]))
     print()
     for i in range(len(student_data[0]['voorkeuren'])):
@@ -208,8 +220,11 @@ def write_results(student_data, outfile):
     :return: None
     """
     with open(outfile, 'w') as f:
-        writer = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
-        student_data = sorted(student_data, key=operator.itemgetter('achternaam'))
+        writer = csv.writer(f, delimiter=';',
+                            quotechar='"',
+                            quoting=csv.QUOTE_ALL)
+        student_data = sorted(student_data,
+                              key=operator.itemgetter('achternaam'))
         for student in student_data:
             row = [student['achternaam'],
                    student['voornaam'],
@@ -235,11 +250,11 @@ def main():
     args = get_comm_args()
     student_data = read_file(args.infile)
     pref_matrix = generate_pref_matrix(student_data)
-    experiment_data = read_experiment_data(args.experiment_names)
-    experiment_matrix = generate_experiment_matrix(pref_matrix, experiment_data)
-    assignment = generate_assignment(experiment_matrix, experiment_data)
-    student_data = add_assignment_data(student_data, assignment, experiment_data)
-    calc_assignment_statistics(student_data, experiment_data)
+    exp_data = read_experiment_data(args.experiment_names)
+    exp_matrix = gen_exp_matrix(pref_matrix, exp_data)
+    assignment = gen_assignment(exp_matrix, exp_data)
+    student_data = add_assign_data(student_data, assignment, exp_data)
+    calc_assign_statistics(student_data, exp_data)
     write_results(student_data, args.outfile)
     print("Result written to {}".format(args.outfile))
     print("Approximate runtime:", round(time.time() - t0, 2), "sec")
