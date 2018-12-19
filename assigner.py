@@ -5,6 +5,7 @@ Practicum Assigner
 by Jurre Hageman (with a little help from Dave Langers on the algorithm)
 Year: 2018
 License: GNU General Public License (GPL)
+Date: 2018-12-19
 """
 # Imports
 import sys
