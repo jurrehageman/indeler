@@ -121,11 +121,19 @@ def gen_exp_matrix(matrix, exp_data):
         print("Exit...")
         sys.exit(1)
     for item in matrix:
+        # generate list with None for each position
         student_matrix = [None for i in range(len(exp_data))]
+        # add preferences at the positions:
+        # exp   1   2   3   4   5   6
+        # Jan           1   2       3
+        # Piet      2       3   1
+        # etc
         for index, i in enumerate(item):
             student_matrix[i - 1] = (index + 1)
         # now share remainder of preferences
+        # generate numbers of remaining pref positions
         position_list = [i for i in range(len(item) + 1, len(exp_data) + 1)]
+        # now fill the list with these numbers
         for index, item in enumerate(student_matrix):
             if item is None:
                 random_exp = random.choice(position_list)
@@ -135,8 +143,8 @@ def gen_exp_matrix(matrix, exp_data):
         exp_list = []
         for index, item in enumerate(student_matrix):
             capacity = exp_data[index]['capacity']
-            exp_list.append(capacity * str(item))
-        exp_list = [int(i) for j in exp_list for i in j]
+            pos = [item for i in range(capacity)]
+            exp_list += pos
         exp_matrix.append(exp_list)
     return np.array(exp_matrix)
 
@@ -147,11 +155,11 @@ def gen_assignment(expanded_matrix, experiment_data):
     :param expanded_matrix: numpy array of the matrix (np.array)
     :return: a list of selected_experiments (list)
     """
-    exp_cap = [i['capacity'] for i in experiment_data]
-    experiment_row = [str((i + 1)) * exp_cap[i] for i in range(len(exp_cap))]
-    experiment_row_separated = [int(i) for j in experiment_row for i in j]
+    experiment_row = []
+    for num, item in enumerate(experiment_data):
+        experiment_row += [num + 1 for i in range(item['capacity'])]
     row_ind, col_ind = linear_sum_assignment(expanded_matrix)
-    selected_experiments = [experiment_row_separated[i] for i in col_ind]
+    selected_experiments = [experiment_row[i] for i in col_ind]
     return selected_experiments
 
 
